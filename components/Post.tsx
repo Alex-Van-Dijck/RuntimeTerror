@@ -1,6 +1,6 @@
-import {Text,View,StyleSheet} from 'react-native';
-import Header from './Header';
-import Body from './Body';
+import { Text, View, StyleSheet } from "react-native";
+import Header from "./Header";
+import Body from "./Body";
 
 interface IPostProps{
     userImageSource:string,
@@ -24,18 +24,17 @@ return(
 }
 
 const styles = StyleSheet.create({
-    card:{
-        display:'flex',
-        flexDirection: 'column',
-        borderColor: 'blue',
-        borderRadius: 50,
-        borderWidth: 2,
-        width:300,
-        height:600,
-        justifyContent:'center',
-        backgroundColor:'lightgrey',
-    }
-  });
-  
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    borderColor: "blue",
+    borderRadius: 50,
+    borderWidth: 2,
+    width: 300,
+    height: 600,
+    justifyContent: "center",
+    backgroundColor: "lightgrey",
+  },
+});
 
 export default Post;

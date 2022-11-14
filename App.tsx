@@ -6,7 +6,7 @@ import Post from './components/Post';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Post/>
+      <Post userImageSource='https://randomuser.me/api/portraits/med/men/3.jpg' userName='John Doe' bodyImageSource='https://img.dummyapi.io/photo-1564849444446-f876dcef378e.jpg' tags={[ 'plant', 'mammal', 'pet' ]} caption='A feral cat short-fur gray and orange cat on green...'/>
     </View>
   );
 }

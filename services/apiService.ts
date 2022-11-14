@@ -1,4 +1,3 @@
-import { IPost, IComment } from './apiService';
 import axios from "axios";
 
 export interface IPost {

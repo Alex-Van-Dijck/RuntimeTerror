@@ -2,6 +2,7 @@ import { Text, View, StyleSheet } from "react-native";
 import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
+import LikeButton from "./LikeButton";
 
 interface IPostProps {
   userImageSource: string;
@@ -9,6 +10,8 @@ interface IPostProps {
   bodyImageSource: string;
   tags: string[];
   caption: string;
+  likes: number;
+  liked: boolean;
 }
 
 const Post = ({
@@ -17,12 +20,15 @@ const Post = ({
   bodyImageSource,
   tags,
   caption,
+  liked,
+  likes,
 }: IPostProps) => {
   return (
     <>
       <View style={styles.card}>
         <Header imageSource={userImageSource} name={userName} />
         <Body imageSource={bodyImageSource} tags={tags} caption={caption} />
+        <LikeButton liked={liked} likes={likes} />
       </View>
     </>
   );
@@ -38,8 +44,8 @@ const styles = StyleSheet.create({
     width: 300,
     height: 480,
     backgroundColor: "lightgrey",
-    padding:15,
-    marginTop:40,
+    padding: 15,
+    marginTop: 40,
   },
 });
 

@@ -1,21 +1,21 @@
 import axios from "axios";
 
 export interface IPost {
-    id: string,
-  image: string,
-  likes: number,
-  tags: string[],
-  text: string,
-  publishDate: string,
-  owner: IUser
+  id?: string;
+  image: string;
+  likes: number;
+  tags: string[];
+  text: string;
+  publishDate: string;
+  owner: IUser;
 }
 
 export interface IUser {
-    id: string,
-    title: string,
-    firstName: string,
-    lastName: string,
-    picture: string
+  id: string;
+  title: string;
+  firstName: string;
+  lastName: string;
+  picture: string;
 }
 
 export interface IComment {
@@ -26,61 +26,81 @@ export interface IComment {
   publishDate: string;
 }
 
-interface Request {
-    url: string,
-    method: string,
-    headers: Headerlist
+interface IHeaderlist {
+  "app-id": string;
 }
 
-interface Headerlist {
-    "app-id": string
+interface IPostData {
+  text: string;
+  image: string;
+  likes: number;
+  tags: string[];
+  owner: string;
 }
 
-let headersList: Headerlist = {
- "app-id": "636901de1c1d102ea94a8e0a" 
-}
+let headersList: IHeaderlist = {
+  "app-id": "636901de1c1d102ea94a8e0a",
+};
 
-const users: Request = {
-  url: "https://dummyapi.io/data/v1/user",
-  method: "GET",
-  headers: headersList,
-}
-
-const comments: Request = {
-    url: "https://dummyapi.io/data/v1/comment",
-    method: "GET",
-    headers: headersList
-}
-
-const posts: Request = {
-    url: "https://dummyapi.io/data/v1/post",
-    method: "GET",
-    headers: headersList
-}
+let uri: string = "https://dummyapi.io/data/v1/";
 
 // function to retrieve data from api. If not given any arguments then it will retrieve posts
-// otherwise it will check if the given argument does match woith one of the 3 request possibilities 
-export const getData = async (stringRequest? : string) => {
-    stringRequest === undefined ? stringRequest = "posts" : null;
-    let request: any;
-    switch (stringRequest){
-        case "users":
-            request = users;
-            break;
-        case "comments":
-            request = comments;
-            break
-        default:
-            request = posts;
-            break;
-    }
-    let response = await axios.request(request);
-    return response.data.data;
-}
+// otherwise it will check if the given argument does match woith one of the 3 request possibilities
+export const getData = async (stringRequest?: string, created?: boolean) => {
+  stringRequest === undefined ? (stringRequest = "posts") : null;
+  created === undefined ? (created = false) : null;
+  let request: any;
+  switch (stringRequest) {
+    case "users":
+      request = { url: `${uri}user`, method: "GET", headers: headersList };
+      break;
+    case "comments":
+      request = { url: `${uri}comment`, method: "GET", headers: headersList };
+      break;
+    default:
+      created
+        ? (request = {
+            url: `${uri}post?created=1`,
+            method: "GET",
+            headers: headersList,
+          })
+        : (request = {
+            url: `${uri}post`,
+            method: "GET",
+            headers: headersList,
+          });
+      break;
+  }
+  const response = await axios.request(request);
+  return response.data.data;
+};
+
+export const postData = async (data: IPostData, stringRequest?: string) => {
+  stringRequest === undefined ? (stringRequest = "posts") : null;
+  let request: any;
+  switch (stringRequest) {
+    case "users":
+      request = { url: `${uri}user`, method: "GET", headers: headersList };
+      break;
+    case "comments":
+      request = { url: `${uri}comment`, method: "GET", headers: headersList };
+      break;
+    default:
+      request = {
+        url: `${uri}post/create`,
+        method: "POST",
+        headers: headersList,
+        data: data,
+      };
+      break;
+  }
+  const response = await axios.request(request);
+  return response.data.data;
+};
 
 const main = async () => {
-let userData: IUser = await getData("users");
-console.log(userData);
-}
+  let userData: IUser = await getData("users");
+  console.log(userData);
+};
 
 //main();

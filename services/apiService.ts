@@ -58,14 +58,30 @@ const posts: Request = {
     headers: headersList
 }
 
-export const getData = async (request:any) => {
+// function to retrieve data from api. If not given any arguments then it will retrieve posts
+// otherwise it will check if the given argument does match woith one of the 3 request possibilities 
+export const getData = async (stringRequest? : string) => {
+    stringRequest === undefined ? stringRequest = "posts" : null;
+    console.log(stringRequest);
+    let request: any;
+    switch (stringRequest){
+        case "users":
+            request = users;
+            break;
+        case "comments":
+            request = comments;
+            break
+        default:
+            request = posts;
+            break;
+    }
     let response = await axios.request(request);
     return response.data.data;
 }
 
 const main = async () => {
-let userData: IUser = await getData(users);
+let userData: IUser = await getData("users");
 console.log(userData);
 }
 
-main();
+//main();

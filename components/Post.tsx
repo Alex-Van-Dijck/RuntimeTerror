@@ -2,16 +2,22 @@ import {Text,View,StyleSheet} from 'react-native';
 import Header from './Header';
 import Body from './Body';
 
+interface IPostProps{
+    userImageSource:string,
+    userName:string,
+    bodyImageSource:string,
+    tags:string[],
+    caption:string,
+}
 
-const Post = () =>{
+const Post = (props:IPostProps) =>{
 
 return(
 <>
     <View style={styles.card} >
-        <Header imageSource='https://randomuser.me/api/portraits/med/men/3.jpg' name='John Doe'/>
-        <Body imageSource='https://img.dummyapi.io/photo-1564849444446-f876dcef378e.jpg' tags={[ 'plant', 'mammal', 'pet' ]} caption='A feral cat short-fur gray and orange cat on green...'/>
+        <Header imageSource={props.userImageSource} name={props.userName}/>
+        <Body imageSource={props.bodyImageSource} tags={props.tags} caption={props.caption}/>
     </View>
-        
 </>
 )
 

@@ -1,6 +1,7 @@
-import {View,Text,StyleSheet, Pressable} from 'react-native';
+import {View,Text,StyleSheet, Pressable,Button} from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useState } from 'react';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 interface ILikeProps{
     likes:number,
@@ -13,15 +14,16 @@ const LikeButton = ({likes,liked}:ILikeProps) =>{
     const [likedNow,setLikedNow] = useState<Boolean>(liked);
 
     const handleLike = () => {
-        setLikesNow(likesNow+1);
-         setLikedNow(true);
+        setLikedNow((likedNow) => !likedNow);
+
+        likedNow? setLikesNow(likesNow-1) : setLikesNow(likesNow+1);
     }
 
     return(
-        <View>
-            <Pressable onPress={()=>{handleLike()}}>
-                {liked? <AntDesign name="like1" size={24} color="black" /> : <AntDesign name="like2" size={24} color="black" /> }
-                <Text>{likes} </Text>
+        <View style={styles.container}>
+            <Pressable onPress={()=>{handleLike()}} style={styles.pressable}>
+                {likedNow? <AntDesign name="like1" size={24} color="black" /> : <AntDesign name="like2" size={24} color="black" /> }
+                <Text>{likesNow} </Text>
             </Pressable>
         </View>
     )
@@ -29,10 +31,14 @@ const LikeButton = ({likes,liked}:ILikeProps) =>{
 
 const styles = StyleSheet.create({
     
-    container:{
+    pressable:{
         flexDirection:'row',
-        width:80,
-        height:20,
+        justifyContent:'space-between',
+        alignItems:'center',
+        paddingTop:185
+    },
+    container:{
+        width:50,
     }
 
 })

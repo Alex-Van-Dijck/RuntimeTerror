@@ -9,7 +9,7 @@ interface IBodyProps {
 const Body = ({ imageSource, tags, caption }: IBodyProps) => {
   return (
     <View style={styles.container}>
-      <Text>{caption}</Text>
+      <Text style={styles.caption}>{caption}</Text>
       <Image style={styles.image} source={{ uri: imageSource }} />
       <Text style={styles.tags}>
         {tags.map((tag: string, key) => (
@@ -24,15 +24,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 2,
     flexDirection: "column",
-    justifyContent: "space-around",
+    paddingBottom:10,
   },
   image: {
-    height: 200,
-    width: 200,
-    alignSelf: "center",
+    height: 250,
+    width: 250,
+    justifyContent:'center',
+    marginTop:20,
   },
   tags: {
     textAlign: "left",
+    paddingBottom:10,
+    paddingTop:10
   },
   caption: {
     textAlign: "left",

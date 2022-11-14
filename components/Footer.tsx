@@ -17,7 +17,7 @@ const Footer = ({likes,liked}:IFooterProps) =>{
 const styles = StyleSheet.create({
 
     container:{
-        flex:1,
+        flex:3,
         flexDirection:'row',
     }
 

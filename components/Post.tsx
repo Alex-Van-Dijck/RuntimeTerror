@@ -33,9 +33,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     width: 300,
-    height: 600,
-    justifyContent: "center",
+    height: 480,
     backgroundColor: "lightgrey",
+    padding:15,
+    marginTop:40,
   },
 });
 

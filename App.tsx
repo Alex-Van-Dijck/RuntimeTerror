@@ -1,19 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View,ScrollView } from 'react-native';
-import Post from './components/Post';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import Post from "./components/Post";
+import { getData, IPost } from "./services/apiService";
 
-
-export default function App() {
+const App = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  useEffect(() => {
+    getData("posts")
+      .then((data) => setPosts(data))
+      .catch((error) => console.error(error))
+      .finally(() => setIsLoading(false));
+  }, []);
+  const numberInArray: number = 7;
   return (
-    <ScrollView style={styles.scroll}>
-      <View style={styles.container}>
-        <Post userImageSource='https://randomuser.me/api/portraits/med/men/3.jpg' userName='John Doe' bodyImageSource='https://img.dummyapi.io/photo-1564849444446-f876dcef378e.jpg' tags={[ 'plant', 'mammal', 'pet' ]} caption='A feral cat short-fur gray and orange cat on green...'/>
-        <Post userImageSource='https://randomuser.me/api/portraits/med/men/3.jpg' userName='John Doe' bodyImageSource='https://img.dummyapi.io/photo-1564849444446-f876dcef378e.jpg' tags={[ 'plant', 'mammal', 'pet' ]} caption='A feral cat short-fur gray and orange cat on green...'/>
-      </View>
-    </ScrollView>
-    
+    <View style={styles.container}>
+      {isLoading ? (
+        <Text>Is loading...</Text>
+      ) : (
+        <ScrollView>
+          {posts.map((post: IPost, index) => (
+            <Post
+              key={index}
+              userImageSource={post.owner.picture}
+              userName={`${post.owner.firstName} ${post.owner.lastName}`}
+              bodyImageSource={post.image}
+              tags={post.tags}
+              caption={post.text}
+            />
+          ))}
+        </ScrollView>
+      )}
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -27,3 +47,5 @@ const styles = StyleSheet.create({
     paddingTop:80
   },
 });
+
+export default App;

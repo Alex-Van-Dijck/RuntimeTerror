@@ -62,7 +62,6 @@ const posts: Request = {
 // otherwise it will check if the given argument does match woith one of the 3 request possibilities 
 export const getData = async (stringRequest? : string) => {
     stringRequest === undefined ? stringRequest = "posts" : null;
-    console.log(stringRequest);
     let request: any;
     switch (stringRequest){
         case "users":

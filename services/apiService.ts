@@ -1,3 +1,4 @@
+import { IPost, IComment } from './apiService';
 import axios from "axios";
 
 export interface IPost {
@@ -58,19 +59,13 @@ const posts: Request = {
     headers: headersList
 }
 
-const getData = async (request:any) => {
+export const getData = async (request:any) => {
     let response = await axios.request(request);
-    // console.log(response.data);
     return response.data.data;
 }
 
 const main = async () => {
 let userData: IUser = await getData(users);
-// let commentData: IComment[] = await getData(comments);
-// let postData : IPost[] = await getData(posts);
-// console.table(userData);
-// for (let i:number = 0; i < commentData.data.length; i++){
-// }
 console.log(userData);
 }
 

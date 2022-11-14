@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import Header from "./Header";
 import Body from "./Body";
+import Footer from "./Footer";
 
 interface IPostProps{
     userImageSource:string,
@@ -17,6 +18,7 @@ return(
     <View style={styles.card} >
         <Header imageSource={props.userImageSource} name={props.userName}/>
         <Body imageSource={props.bodyImageSource} tags={props.tags} caption={props.caption}/>
+        <Footer liked={false} likes={69} />
     </View>
 </>
 )

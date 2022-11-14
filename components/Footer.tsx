@@ -1,9 +1,26 @@
-import {View} from 'react-native';
+import {View,StyleSheet} from 'react-native';
+import LikeButton from './LikeButton';
 
-const footer = () =>{
+interface IFooterProps{
+    likes:number,
+    liked:boolean
+}
+
+const Footer = ({likes,liked}:IFooterProps) =>{
     return(
-        <View>
-
+        <View style={styles.container}>
+            <LikeButton liked={liked} likes={likes}/>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+
+    container:{
+        flex:1,
+        flexDirection:'row',
+    }
+
+});
+
+export default Footer;

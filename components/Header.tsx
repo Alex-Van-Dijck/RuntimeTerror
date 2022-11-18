@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   name: {
     marginTop: 30,
     marginLeft: 5,
-    fontSize: 20,
+    fontSize: 18,
   },
   image: {
     width: 60,

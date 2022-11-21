@@ -33,7 +33,6 @@ interface IOptions {
 }
 
 const apiKey: string | undefined = process.env.IMGBB_API_KEY;
-console.log(apiKey);
 
 const getImageUrl = (
   apiKey: string | undefined,

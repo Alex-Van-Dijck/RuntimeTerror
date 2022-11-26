@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Post from "./components/Post";
 import { getData, IPost } from "./services/apiService";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 
 const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -16,11 +19,11 @@ const App = () => {
   const numberInArray: number = 7;
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.scroll}>
         {isLoading ? (
           <Text>Is loading...</Text>
         ) : (
-          <View>
+          <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
                 key={index}
@@ -46,9 +49,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
+    
   },
   scroll: {
-    paddingTop: 80,
+    width:'100%',
   },
 });
 

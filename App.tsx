@@ -4,6 +4,7 @@ import Post from "./components/Post";
 import { getData, IPost } from "./services/apiService";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./components/HomeScreen";
 
 
 const App = () => {
@@ -23,20 +24,7 @@ const App = () => {
         {isLoading ? (
           <Text>Is loading...</Text>
         ) : (
-          <View style={{alignItems:'center'}}>
-            {posts.map((post: IPost, index) => (
-              <Post
-                key={index}
-                userImageSource={post.owner.picture}
-                userName={`${post.owner.firstName} ${post.owner.lastName}`}
-                bodyImageSource={post.image}
-                tags={post.tags}
-                caption={post.text}
-                liked={false}
-                likes={post.likes}
-              />
-            ))}
-          </View>
+          <HomeScreen posts={posts}/>
         )}
       </ScrollView>
     </View>

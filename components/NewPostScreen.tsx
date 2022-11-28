@@ -17,20 +17,6 @@ const NewPostScreen =()=> {
     const [permission, requestPermission] = Camera.useCameraPermissions();
 
     let camera: Camera | null;
-  if (!permission) {
-    // Camera permissions are still loading
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
 
   const toggleCameraType = () => {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
@@ -65,18 +51,21 @@ const NewPostScreen =()=> {
                     style={styles.textinput}
                     />
                 </View>
-                        <View style={styles.cameraContainer}>
-            <Camera style={styles.camera} type={type} ref={(r)=>{camera = r}}>
-                <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-                    <Text style={styles.text}>Flip Camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={takePicture}>
-                    <Text style={styles.text}>Take Picture</Text>
-                </TouchableOpacity>
-                </View>
-            </Camera>
-            </View>
+                {!permission?.granted? <View style={styles.container}>
+                        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+                        <Button onPress={requestPermission} title="grant permission" />
+                    </View> :  <View style={styles.cameraContainer}>
+                    <Camera style={styles.camera} type={type} ref={(r)=>{camera = r}}>
+                        <View style={styles.buttonContainer}>
+                                <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+                            <Text style={styles.text}>Flip Camera</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={takePicture}>
+                                <Text style={styles.text}>Take Picture</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Camera>
+                </View>    }
             </View>
         </>
     )
@@ -84,11 +73,13 @@ const NewPostScreen =()=> {
 
 const styles = StyleSheet.create({
     container: {
+        justifyContent:'center',
         paddingTop: Constants.statusBarHeight,
         display:'flex',
         flexDirection:"column",
-        marginLeft:15,
-        marginRight:15,
+        marginLeft:'auto',
+        marginRight:'auto',
+    
    },
    inputContainer:{
       marginTop:100, 
@@ -100,15 +91,18 @@ const styles = StyleSheet.create({
   cameraContainer: {
     flex: 1,
     justifyContent: 'center',
+    marginTop:200,
   },
   camera: {
-    flex: 1,
+    marginTop:100,
+    width:300,
+    height:400
   },
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    margin: 64,
+    margin: 'auto',
   },
   button: {
     flex: 1,

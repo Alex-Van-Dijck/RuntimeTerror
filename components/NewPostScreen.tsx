@@ -140,24 +140,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   camera: {
-    flex: 1,
+    marginTop:100,
+    width:300,
+    height:400
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    margin: 64,
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    margin: 'auto',
   },
   button: {
     flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    borderColor:'white',
+    borderRadius:100,
+    borderWidth:1,
+
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
   },
+  submitButton:{
+  }
 });
 
 export default NewPostScreen;

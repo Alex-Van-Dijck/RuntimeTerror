@@ -21,6 +21,7 @@ const NewPostScreen = () => {
   const [bodyImageSource, setBodyImageSource] = useState<string>("");
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [useCamera, setUseCamera] = useState<boolean>(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -31,6 +32,9 @@ const NewPostScreen = () => {
     };
     loadUser();
   }, []);
+
+  useEffect(() => {
+  }, [useCamera]);
 
   let camera: Camera | null;
   if (!permission) {
@@ -60,8 +64,14 @@ const NewPostScreen = () => {
     console.log("taking picture");
     if (!camera) return;
     const photo = await camera.takePictureAsync();
+    await setUseCamera(false)
+    setBodyImageSource(photo.uri);
     console.log(photo);
   };
+
+  const handleUseCamera = () => {
+    setUseCamera(current => !current);
+  }
 
  return (
     <>
@@ -92,8 +102,9 @@ const NewPostScreen = () => {
             keyboardType="default"
             style={styles.textinput}
           />
+          <Button title="Take a picture" onPress={handleUseCamera}/>
         </View>
-        <View style={styles.cameraContainer}>
+        {useCamera ? <View style={styles.cameraContainer}>
           <Camera
             style={styles.camera}
             type={type}
@@ -113,7 +124,7 @@ const NewPostScreen = () => {
               </TouchableOpacity>
             </View>
           </Camera>
-        </View>
+        </View> : <View></View>}
       </View>
     </>
   );

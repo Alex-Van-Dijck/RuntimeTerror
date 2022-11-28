@@ -66,7 +66,13 @@ const NewPostScreen =()=> {
                         </View>
                     </Camera>
                 </View>    }
+                <View>
+                <Button title='Submit post' style={styles.submitButton}/>
+                </View>
+                
             </View>
+            
+
         </>
     )
 }
@@ -79,10 +85,9 @@ const styles = StyleSheet.create({
         flexDirection:"column",
         marginLeft:'auto',
         marginRight:'auto',
-    
    },
    inputContainer:{
-      marginTop:100, 
+      marginTop:80, 
    }, 
    textinput: {
        marginTop:10,
@@ -91,7 +96,7 @@ const styles = StyleSheet.create({
   cameraContainer: {
     flex: 1,
     justifyContent: 'center',
-    marginTop:200,
+    marginTop:160,
   },
   camera: {
     marginTop:100,
@@ -108,12 +113,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
+    borderColor:'white',
+    borderRadius:100,
+    borderWidth:1,
+
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
   },
+  submitButton:{
+  }
 });
 
 export default NewPostScreen;

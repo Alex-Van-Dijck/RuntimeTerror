@@ -6,7 +6,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./components/HomeScreen";
 
-
 const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -17,16 +16,18 @@ const App = () => {
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
   }, []);
-  const numberInArray: number = 7;
+  // const numberInArray: number = 7;
+  console.log(posts.length);
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
-        {isLoading ? (
-          <Text>Is loading...</Text>
-        ) : (
-          <HomeScreen posts={posts}/>
-        )}
-      </ScrollView>
+      
+        <ScrollView style={styles.scroll}>
+          {isLoading ? (
+            <Text>Is loading...</Text>
+          ) : posts.length === 0 ? (<Text>You made no posts yet</Text>) : (
+            <HomeScreen posts={posts} />
+          )}
+        </ScrollView>
     </View>
   );
 };
@@ -37,10 +38,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
-    
   },
   scroll: {
-    width:'100%',
+    width: "100%",
   },
 });
 

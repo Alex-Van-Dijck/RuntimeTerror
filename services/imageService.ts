@@ -34,6 +34,14 @@ interface IOptions {
 
 const apiKey: string | undefined = process.env.IMGBB_API_KEY;
 
+/**
+ * It takes an apiKey, an imagePath and a name as arguments and returns an object with the image url
+ * and the image delete url.
+ * @param {string | undefined} apiKey - string | undefined,
+ * @param {string} [imagePath] - The path to the image you want to upload.
+ * @param {string} [name] - The name of the image.
+ * @returns The result is being returned.
+ */
 const getImageUrl = (
   apiKey: string | undefined,
   imagePath?: string,

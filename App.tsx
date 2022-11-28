@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import Post from "./components/Post";
 import { getData, IPost } from "./services/apiService";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./components/HomeScreen";
-
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -18,16 +17,24 @@ const App = () => {
       .finally(() => setIsLoading(false));
   }, []);
   const numberInArray: number = 7;
+  const Tab = createBottomTabNavigator();
+
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scroll}>
-        {isLoading ? (
-          <Text>Is loading...</Text>
-        ) : (
-          <HomeScreen posts={posts}/>
-        )}
-      </ScrollView>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Tab.Navigator>
+          <ScrollView style={styles.scroll}>
+          {isLoading ? (
+            <Text>Is loading...</Text>
+          ) : (
+            <HomeScreen posts={posts}/>
+          )}
+        </ScrollView>
+        </Tab.Navigator>
+       
+      </View>
+    </NavigationContainer>
+    
   );
 };
 

@@ -17,11 +17,10 @@ const App = () => {
     <NavigationContainer >
         <Tab.Navigator>
           <Tab.Screen name="Home" component={HomeScreen} options={{
-            tabBarIcon: ({color, size}) => <FontAwesome name="home" size={size} color={color} />
+            tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="home" size={size} color={color} />
         }}  />
           <Tab.Screen name="New Post" component={NewPostScreen} options={{
-            
-            tabBarIcon: ({color, size}) => <Entypo name="camera" size={size} color={color} />
+            tabBarIcon: ({color, size}: {color:any, size:any}) => <Entypo name="camera" size={size} color={color} />
         }}   />
         </Tab.Navigator>
     </NavigationContainer>

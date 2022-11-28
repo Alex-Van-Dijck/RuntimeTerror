@@ -20,6 +20,7 @@ const App = () => {
             tabBarIcon: ({color, size}) => <FontAwesome name="home" size={size} color={color} />
         }}  />
           <Tab.Screen name="New Post" component={NewPostScreen} options={{
+            
             tabBarIcon: ({color, size}) => <Entypo name="camera" size={size} color={color} />
         }}   />
         </Tab.Navigator>

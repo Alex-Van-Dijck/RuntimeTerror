@@ -26,8 +26,8 @@ const App = () => {
           <ScrollView style={styles.scroll}>
           {isLoading ? (
             <Text>Is loading...</Text>
-          ) : (
-            <HomeScreen posts={posts}/>
+          ) : posts.length === 0 ? (<Text>You made no posts yet</Text>) : (
+            <HomeScreen posts={posts} />
           )}
         </ScrollView>
         </Tab.Navigator>
@@ -44,10 +44,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
-    
   },
   scroll: {
-    width:'100%',
+    width: "100%",
   },
 });
 

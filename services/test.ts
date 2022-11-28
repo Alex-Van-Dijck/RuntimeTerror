@@ -1,6 +1,6 @@
 import { getData } from "./apiService";
 const test = async () => {
-  console.log(await getData("posts", true));
+  console.log(await getData("comments", true));
 };
 
 test();

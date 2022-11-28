@@ -30,12 +30,25 @@ interface IHeaderlist {
   "app-id": string;
 }
 
-interface IPostData {
+interface ICreatePost {
   text: string;
   image: string;
   likes: number;
   tags: string[];
   owner: string;
+}
+
+interface ICreateUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  picture: string;
+}
+
+interface ICreateComment {
+  owner: string;
+  post: string;
+  message: string;
 }
 
 let headersList: IHeaderlist = {
@@ -44,18 +57,44 @@ let headersList: IHeaderlist = {
 
 let uri: string = "https://dummyapi.io/data/v1/";
 
-// function to retrieve data from api. If not given any arguments then it will retrieve posts
-// otherwise it will check if the given argument does match woith one of the 3 request possibilities
+
+/**
+ * It takes two optional parameters, a string and a boolean, and returns a promise that resolves to an
+ * array of objects.
+ * @param {string} [stringRequest] - string = "users", "comments" en "posts"
+ * @param {boolean} [created] - boolean
+ * @returns An array of objects.
+ */
 export const getData = async (stringRequest?: string, created?: boolean) => {
   stringRequest === undefined ? (stringRequest = "posts") : null;
   created === undefined ? (created = false) : null;
   let request: any;
   switch (stringRequest) {
     case "users":
-      request = { url: `${uri}user`, method: "GET", headers: headersList };
+      created
+        ? (request = {
+            url: `${uri}user?created=1`,
+            method: "GET",
+            headers: headersList,
+          })
+        : (request = {
+            url: `${uri}user`,
+            method: "GET",
+            headers: headersList,
+          });
       break;
     case "comments":
-      request = { url: `${uri}comment`, method: "GET", headers: headersList };
+      created
+        ? (request = {
+            url: `${uri}comment?created=1`,
+            method: "GET",
+            headers: headersList,
+          })
+        : (request = {
+            url: `${uri}comment`,
+            method: "GET",
+            headers: headersList,
+          });
       break;
     default:
       created
@@ -75,15 +114,31 @@ export const getData = async (stringRequest?: string, created?: boolean) => {
   return response.data.data;
 };
 
-export const postData = async (data: IPostData, stringRequest?: string) => {
+/**
+ * It takes in a data object and a stringRequest, and returns a response.data.data object.
+ * @param {ICreatePost | ICreateUser | ICreateComment} data - ICreatePost | ICreateUser |
+ * ICreateComment
+ * @param {string} [stringRequest] - string
+ * @returns The data that is being returned is the data that is being sent to the server.
+ */
+export const postData = async (data: ICreatePost | ICreateUser | ICreateComment, stringRequest?: string) => {
   stringRequest === undefined ? (stringRequest = "posts") : null;
   let request: any;
   switch (stringRequest) {
     case "users":
-      request = { url: `${uri}user`, method: "GET", headers: headersList };
+      request = { 
+        url: `${uri}user/create`, 
+        method: "POST", 
+        headers: headersList,
+        data: data
+      };
       break;
     case "comments":
-      request = { url: `${uri}comment`, method: "GET", headers: headersList };
+      request = { 
+        url: `${uri}comment`, 
+        method: "GET", 
+        headers: headersList,
+        data: data };
       break;
     default:
       request = {

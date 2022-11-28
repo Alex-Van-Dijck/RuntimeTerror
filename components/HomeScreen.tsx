@@ -1,15 +1,26 @@
-import React from "react";
-import {View} from 'react-native';
-import { IPost } from "../services/apiService";
+import React,{useEffect,useState} from "react";
+import {View,ScrollView,Text,StyleSheet} from 'react-native';
 import Post from "./Post";
+import { getData, IPost } from "../services/apiService";
 
-interface IHomeScreenProps{
-    posts:IPost[]
-}
 
-const HomeScreen = ({posts}:IHomeScreenProps) =>{
+const HomeScreen = () =>{
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
+  useEffect(() => {
+    getData("posts", onlyCreated)
+      .then((data) => setPosts(data))
+      .catch((error) => console.error(error))
+      .finally(() => setIsLoading(false));
+  }, []);
+
     return(
         <>
+        <ScrollView style={styles.scroll}>
+          {isLoading ? (
+            <Text>Is loading...</Text>
+          ) : posts.length === 0 ? (<Text>You made no posts yet</Text>) : (
             <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
@@ -24,8 +35,17 @@ const HomeScreen = ({posts}:IHomeScreenProps) =>{
               />
             ))}
           </View>
+          )}
+        </ScrollView>
+           
         </>
     )
 }
+
+const styles = StyleSheet.create({
+  scroll: {
+    width: "100%",
+  },
+})
 
 export default HomeScreen;

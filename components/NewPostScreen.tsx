@@ -1,22 +1,38 @@
-import React,{useState} from 'react';
-import {View,TextInput,StyleSheet,TouchableOpacity,Button,Text} from 'react-native';
-import Header from './Header';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  Text,
+} from "react-native";
+import Header from "./Header";
 import Constants from "expo-constants";
-import { Camera, CameraType } from 'expo-camera';
+import { Camera, CameraType } from "expo-camera";
+import { getData, getUser, IUser } from "../services/apiService";
+import { Title } from "../services/titleEnum";
 
+const NewPostScreen = () => {
+  const [user, setUser] = useState<IUser>({title: "", firstName: "", lastName: "", picture: "" });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [caption, setCaption] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([""]);
+  const [bodyImageSource, setBodyImageSource] = useState<string>("");
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
 
-const NewPostScreen =()=> {
+  useEffect(() => {
+    const loadUser = async () => {
+      const searchUser = await getUser("60d0fe4f5311236168a109da");
+      await setUser(searchUser);
+      console.log(searchUser)
+      await setIsLoading(false);
+    };
+    loadUser();
+  }, []);
 
-    const userImageSource = "https://pm1.narvii.com/7258/5520799cf0539b408bd8abee0a14d3a492ee5107r1-753-753v2_hq.jpg";
-    const userName = "Pikachu";
-     
-    const [caption,setCaption] = useState<string>("");
-    const [tags,setTags] = useState<string[]>([""]);
-    const [bodyImageSource,setBodyImageSource] = useState<string>("");
-    const [type, setType] = useState(CameraType.back);
-    const [permission, requestPermission] = Camera.useCameraPermissions();
-
-    let camera: Camera | null;
+  let camera: Camera | null;
   if (!permission) {
     // Camera permissions are still loading
     return <View />;
@@ -26,99 +42,121 @@ const NewPostScreen =()=> {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
         <Button onPress={requestPermission} title="grant permission" />
       </View>
     );
   }
 
   const toggleCameraType = () => {
-    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
-  }
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  };
 
   const takePicture = async () => {
-    console.log('taking picture');
-    if (!camera) return
-    const photo = await camera.takePictureAsync(); 
+    console.log("taking picture");
+    if (!camera) return;
+    const photo = await camera.takePictureAsync();
     console.log(photo);
-    }
+  };
 
-    
-
-    return(
-        <>
-            <View style={styles.container}>
-                <Header imageSource={userImageSource} name={userName} />
-                <View style={styles.inputContainer}>
-                    <TextInput
-                    secureTextEntry={false}
-                    autoCapitalize="characters"
-                    placeholder="Caption"
-                    keyboardType="default"
-                    style={styles.textinput}
-                    onSubmitEditing={(e)=>{setCaption(e.nativeEvent.text)}}
-                    />
-                    <TextInput  secureTextEntry={false}
-                    autoCapitalize="characters"
-                    placeholder="Tags (Separated by ',')"
-                    keyboardType="default"
-                    style={styles.textinput}
-                    />
-                </View>
-                        <View style={styles.cameraContainer}>
-            <Camera style={styles.camera} type={type} ref={(r)=>{camera = r}}>
-                <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-                    <Text style={styles.text}>Flip Camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={takePicture}>
-                    <Text style={styles.text}>Take Picture</Text>
-                </TouchableOpacity>
-                </View>
-            </Camera>
+ return (
+    <>
+      <View style={styles.container}>
+        {isLoading ? (
+          <Text>Is loading...</Text>
+        ) : (
+          <Header
+            imageSource={`${user.picture}`}
+            name={`${user.firstName} ${user.lastName}`}
+          />
+        )}
+        <View style={styles.inputContainer}>
+          <TextInput
+            secureTextEntry={false}
+            autoCapitalize="characters"
+            placeholder="Caption"
+            keyboardType="default"
+            style={styles.textinput}
+            onSubmitEditing={(e) => {
+              setCaption(e.nativeEvent.text);
+            }}
+          />
+          <TextInput
+            secureTextEntry={false}
+            autoCapitalize="characters"
+            placeholder="Tags (Separated by ',')"
+            keyboardType="default"
+            style={styles.textinput}
+          />
+        </View>
+        <View style={styles.cameraContainer}>
+          <Camera
+            style={styles.camera}
+            type={type}
+            ref={(r) => {
+              camera = r;
+            }}
+          >
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={toggleCameraType}
+              >
+                <Text style={styles.text}>Flip Camera</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={takePicture}>
+                <Text style={styles.text}>Take Picture</Text>
+              </TouchableOpacity>
             </View>
-            </View>
-        </>
-    )
-}
+          </Camera>
+        </View>
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: Constants.statusBarHeight,
-        display:'flex',
-        flexDirection:"column",
-        marginLeft:15,
-        marginRight:15,
-   },
-   inputContainer:{
-      marginTop:100, 
-   }, 
-   textinput: {
-       marginTop:10,
-        borderColor: "lightblue", borderWidth: 1
-   },
+  container: {
+    paddingTop: Constants.statusBarHeight,
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  inputContainer: {
+    marginTop: 100,
+  },
+  textinput: {
+    marginTop: 10,
+    borderColor: "lightblue",
+    borderWidth: 1,
+  },
   cameraContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
+    flexDirection: "row",
+    backgroundColor: "transparent",
     margin: 64,
   },
   button: {
     flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
+    alignSelf: "flex-end",
+    alignItems: "center",
   },
   text: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
 });
 

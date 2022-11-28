@@ -10,8 +10,9 @@ export interface IPost {
   owner: IUser;
 }
 
+/* An interface that is being exported. */
 export interface IUser {
-  id: string;
+  id?: string;
   title: string;
   firstName: string;
   lastName: string;
@@ -27,7 +28,7 @@ export interface IComment {
 }
 
 interface IHeaderlist {
-  "app-id": string;
+  "app-id": string | undefined;
 }
 
 interface ICreatePost {
@@ -52,7 +53,7 @@ interface ICreateComment {
 }
 
 let headersList: IHeaderlist = {
-  "app-id": "636901de1c1d102ea94a8e0a",
+  "app-id": "636901de1c1d102ea94a8e0a"
 };
 
 let uri: string = "https://dummyapi.io/data/v1/";
@@ -153,9 +154,26 @@ export const postData = async (data: ICreatePost | ICreateUser | ICreateComment,
   return response.data.data;
 };
 
+/**
+ * This function takes a string as an argument and returns a promise that resolves to an object.
+ * @param {string} id - string
+ * @returns The response.data.data is the data that is being returned.
+ */
+export const getUser = async (id: string) => {
+  let request :any = {
+    url: `${uri}user/${id}`,
+    method: "GET",
+    headers: headersList,
+  }
+  const response = await axios.request(request);
+  return response.data;
+}
+
 const main = async () => {
-  let userData: IUser = await getData("users");
-  console.log(userData);
+  // let userData: IUser = await getData("users");
+  // console.log(userData);
+  let user : IUser = await getUser("60d0fe4f5311236168a109dd");
+  console.log(await user)
 };
 
-//main();
+// main();

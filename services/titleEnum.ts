@@ -1,4 +1,4 @@
-enum Title{
+export enum Title{
     "mr",
     "ms",
     "miss"

@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import {View,ScrollView,Text,StyleSheet} from 'react-native';
 import Post from "./Post";
-import { getData, IPost } from "../services/apiService";
+import { getData, getUser, IPost, IUser } from "../services/apiService";
 
 
 const HomeScreen = () =>{

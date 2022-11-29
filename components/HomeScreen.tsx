@@ -8,6 +8,7 @@ const HomeScreen = () =>{
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
+  /* A hook that is used to fetch data from the api. */
   useEffect(() => {
     getData("posts", onlyCreated)
       .then((data) => setPosts(data))

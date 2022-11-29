@@ -54,12 +54,20 @@ const NewPostScreen = () => {
     );
   }
 
+  /**
+   * If the current camera type is back, then set the camera type to front, otherwise set the camera
+   * type to back.
+   */
   const toggleCameraType = () => {
     setType((current) =>
       current === CameraType.back ? CameraType.front : CameraType.back
     );
   };
 
+  /**
+   * TakePicture is an async function that takes a picture with the camera, sets the useCamera state to
+   * false, and sets the bodyImageSource state to the photo's uri.
+   */
   const takePicture = async () => {
     console.log("taking picture");
     if (!camera) return;
@@ -69,6 +77,10 @@ const NewPostScreen = () => {
     console.log(photo);
   };
 
+ /**
+  * If the current value of useCamera is true, then set useCamera to false, otherwise set useCamera to
+  * true.
+  */
   const handleUseCamera = () => {
     setUseCamera(current => !current);
   }

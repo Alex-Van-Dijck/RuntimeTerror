@@ -5,6 +5,12 @@ interface IHeaderProps {
   name: string;
 }
 
+/**
+ * Header is a function that takes in an object with two properties, imageSource and name, and returns
+ * a View component with two children, an Image component and a Text component.
+ * @param {IHeaderProps}  - IHeaderProps
+ * @returns A React component.
+ */
 const Header = ({ imageSource, name }: IHeaderProps) => {
   return (
     <View style={styles.container}>

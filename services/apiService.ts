@@ -66,7 +66,7 @@ let uri: string = "https://dummyapi.io/data/v1/";
  * @param {boolean} [created] - boolean
  * @returns An array of objects.
  */
-export const getData = async (stringRequest?: string, created?: boolean) => {
+export const getAPIData = async (stringRequest?: string, created?: boolean) => {
   stringRequest === undefined ? (stringRequest = "posts") : null;
   created === undefined ? (created = false) : null;
   let request: any;

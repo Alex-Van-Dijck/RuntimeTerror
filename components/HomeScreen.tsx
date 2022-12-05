@@ -1,7 +1,7 @@
-import React,{useEffect,useState} from "react";
+import React,{useEffect,useState,useContext} from "react";
 import {View,ScrollView,Text,StyleSheet} from 'react-native';
 import Post from "./Post";
-import { getData, getUser, IPost, IUser } from "../services/apiService";
+import { getAPIData, getUser, IPost, IUser } from "../services/apiService";
 
 
 const HomeScreen = () =>{
@@ -9,8 +9,12 @@ const HomeScreen = () =>{
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
   /* A hook that is used to fetch data from the api. */
+
+  const [theme,setTheme] = useState("Light");
+  
+
   useEffect(() => {
-    getData("posts", onlyCreated)
+    getAPIData("posts", onlyCreated)
       .then((data) => setPosts(data))
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));

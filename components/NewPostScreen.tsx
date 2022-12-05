@@ -11,7 +11,7 @@ import {
 import Header from "./Header";
 import Constants from "expo-constants";
 import { Camera, CameraType } from "expo-camera";
-import { getData, getUser, IUser } from "../services/apiService";
+import { getAPIData, getUser, IUser } from "../services/apiService";
 import { Title } from "../services/titleEnum";
 import { getImageUrl } from "../services/imageService";
 import * as ImagePicker from "expo-image-picker";
@@ -74,12 +74,12 @@ const NewPostScreen = () => {
     console.log("taking picture");
     if (!camera) return;
     const photo = await camera.takePictureAsync();
-    await setUseCamera(false)
-    let uri  = await getImageUrl(await photo.uri, "Picture").url
-    await console.log(await uri)
-    await setBodyImageSource(await uri);
-    console.log(photo);
-    console.log(await bodyImageSource);
+    await setUseCamera(false);
+    // let uri  = await getImageUrl(await photo.uri, "Picture").url
+    // await console.log(await uri)
+    // await setBodyImageSource(await uri);
+    // console.log(photo);
+    // console.log(await bodyImageSource);
   };
 
  /**

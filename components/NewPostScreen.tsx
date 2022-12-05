@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   Button,
   Text,
+  Image
 } from "react-native";
 import Header from "./Header";
 import Constants from "expo-constants";
 import { Camera, CameraType } from "expo-camera";
 import { getData, getUser, IUser } from "../services/apiService";
 import { Title } from "../services/titleEnum";
+import { getImageUrl } from "../services/imageService";
+import * as ImagePicker from "expo-image-picker";
 
 const NewPostScreen = () => {
   const [user, setUser] = useState<IUser>({title: "", firstName: "", lastName: "", picture: "" });
@@ -27,7 +30,6 @@ const NewPostScreen = () => {
     const loadUser = async () => {
       const searchUser = await getUser("60d0fe4f5311236168a109da");
       await setUser(searchUser);
-      console.log(searchUser)
       await setIsLoading(false);
     };
     loadUser();
@@ -73,8 +75,11 @@ const NewPostScreen = () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync();
     await setUseCamera(false)
-    setBodyImageSource(photo.uri);
+    let uri  = await getImageUrl(await photo.uri, "Picture").url
+    await console.log(await uri)
+    await setBodyImageSource(await uri);
     console.log(photo);
+    console.log(await bodyImageSource);
   };
 
  /**
@@ -83,6 +88,19 @@ const NewPostScreen = () => {
   */
   const handleUseCamera = () => {
     setUseCamera(current => !current);
+  }
+
+  const handleChoosePicture = () => {
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    }).then((result) => {
+      if (!result.cancelled) {
+        setBodyImageSource(result.uri);
+      }
+    });
   }
 
  return (
@@ -115,6 +133,7 @@ const NewPostScreen = () => {
             style={styles.textinput}
           />
           <Button title="Take a picture" onPress={handleUseCamera}/>
+          <Button title="Choose a picture" onPress={handleChoosePicture}/>
         </View>
         {useCamera ? <View style={styles.cameraContainer}>
           <Camera
@@ -164,8 +183,8 @@ const styles = StyleSheet.create({
   },
   camera: {
     marginTop:100,
-    width:300,
-    height:400
+    width:350,
+    height:400,
   },
   buttonContainer: {
     flex: 1,

@@ -42,16 +42,15 @@ const apiKey: string | undefined = process.env.IMGBB_API_KEY;
  * @param {string} [name] - The name of the image.
  * @returns The result is being returned.
  */
-const getImageUrl = (
-  apiKey: string | undefined,
+export const getImageUrl = (
   imagePath?: string,
   name?: string
 ) => {
   const options: IOptions = {
-    apiKey: apiKey,
+    apiKey: process.env.IMGBB_API_KEY,
     imagePath:
-      "C:\\Users\\raven\\Pictures\\Screenshots\\Schermafbeelding_20221104_111059.png",
-    name: "Your favo picture",
+      "",
+    name: "",
   };
 
   imagePath ? (options.imagePath = imagePath) : null;

@@ -150,6 +150,7 @@ const NewPostScreen = () => {
           <Text>Is loading...</Text>
         ) : (
           <Header
+            theme={0}
             imageSource={`${user.picture}`}
             name={`${user.firstName} ${user.lastName}`}
           />

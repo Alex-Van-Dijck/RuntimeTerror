@@ -62,7 +62,7 @@ const App = () => {
   return (
     <NavigationContainer theme={Theme==0?lightTheme:darkTheme}>
         <Tab.Navigator >
-          <Tab.Screen name="Home" component={HomeScreen} options={{
+          <Tab.Screen name="Home" children={()=><HomeScreen Theme={Theme}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="home" size={size} color={color} />
         }}  />
           <Tab.Screen name="New Post" component={NewPostScreen} options={{

@@ -43,7 +43,6 @@ const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
     return(
         <View >
             <Button onPress={toggleTheme} title="Switch theme" />
-            <Text>Current theme: {Theme}</Text>
         </View>
 
     )

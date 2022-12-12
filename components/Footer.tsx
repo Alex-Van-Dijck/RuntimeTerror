@@ -3,13 +3,14 @@ import LikeButton from './LikeButton';
 
 interface IFooterProps{
     likes:number,
-    liked:boolean
+    liked:boolean,
+    theme:number,
 }
 
-const Footer = ({likes,liked}:IFooterProps) =>{
+const Footer = ({likes,liked,theme}:IFooterProps) =>{
     return(
         <View style={styles.container}>
-            <LikeButton liked={liked} likes={likes}/>
+            <LikeButton liked={liked} likes={likes} theme={theme}/>
         </View>
     )
 }

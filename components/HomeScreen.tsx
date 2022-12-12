@@ -6,29 +6,18 @@ import { getAPIData, getUser, IPost, IUser } from "../services/apiService";
 import Constants from "expo-constants";
 import { useIsFocused } from "@react-navigation/native";
 
+interface HomeScreenProps{
+  Theme:number
+}
 
-const HomeScreen = () =>{
+const HomeScreen = ({Theme}:HomeScreenProps) =>{
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
 
   
   
-  /* A hook that is used to fetch data from the api. */
-
-  const isFocused = useIsFocused();
-  const [Theme, setTheme] = useState(0);
-
-  useEffect(() => {
-    const getData = async () => {
-      const value = await AsyncStorage.getItem("Theme");
-      if (value !== null) {
-        setTheme(parseInt(value));
-      }
-    };
-    getData();
-  }, [isFocused]);
-  
+  /* A hook that is used to fetch data from the api. */ 
 
   useEffect(() => {
     getAPIData("posts", onlyCreated)
@@ -46,6 +35,7 @@ const HomeScreen = () =>{
             <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
+                theme={Theme}
                 key={index}
                 userImageSource={post.owner.picture}
                 userName={`${post.owner.firstName} ${post.owner.lastName}`}

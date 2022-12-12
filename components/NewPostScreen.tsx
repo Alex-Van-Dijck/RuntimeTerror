@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Button,
   Text,
-  Image
+  Image,
+  ScrollView,
 } from "react-native";
 import Header from "./Header";
 import Constants from "expo-constants";
@@ -17,11 +18,17 @@ import { getImageUrl } from "../services/imageService";
 import * as ImagePicker from "expo-image-picker";
 
 const NewPostScreen = () => {
-  const [user, setUser] = useState<IUser>({title: "", firstName: "", lastName: "", picture: "" });
+  const [user, setUser] = useState<IUser>({
+    title: "",
+    firstName: "",
+    lastName: "",
+    picture: "",
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [caption, setCaption] = useState<string>("");
   const [tags, setTags] = useState<string[]>([""]);
   const [bodyImageSource, setBodyImageSource] = useState<string>("");
+  const [arrImage, setArrImage] = useState<IObj[]>([]);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [useCamera, setUseCamera] = useState<boolean>(false);
@@ -35,8 +42,7 @@ const NewPostScreen = () => {
     loadUser();
   }, []);
 
-  useEffect(() => {
-  }, [useCamera]);
+  useEffect(() => {}, [useCamera]);
 
   let camera: Camera | null;
   if (!permission) {
@@ -75,21 +81,22 @@ const NewPostScreen = () => {
     if (!camera) return;
     const photo = await camera.takePictureAsync();
     await setUseCamera(false);
-    // let uri  = await getImageUrl(await photo.uri, "Picture").url
-    // await console.log(await uri)
-    // await setBodyImageSource(await uri);
-    // console.log(photo);
-    // console.log(await bodyImageSource);
+    await setBodyImageSource(photo.uri);
+    addImageToArray(photo.uri);
   };
 
- /**
-  * If the current value of useCamera is true, then set useCamera to false, otherwise set useCamera to
-  * true.
-  */
+  /**
+   * If the current value of useCamera is true, then set useCamera to false, otherwise set useCamera to
+   * true.
+   */
   const handleUseCamera = () => {
-    setUseCamera(current => !current);
-  }
+    setUseCamera((current) => !current);
+  };
 
+  /**
+   * When the user clicks the button, open the image picker and allow the user to choose an image. If
+   * the user chooses an image, set the image source to the image the user chose.
+   */
   const handleChoosePicture = () => {
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -99,12 +106,45 @@ const NewPostScreen = () => {
     }).then((result) => {
       if (!result.cancelled) {
         setBodyImageSource(result.uri);
+        addImageToArray(result.uri);
       }
     });
+  };
+
+  /* Defining an interface for an object that has an id property and a uri property. */
+  interface IObj {
+    id: number;
+    uri: string;
   }
 
- return (
-    <>
+  /**
+   * AddImageToArray() is a function that takes an object with an id and uri property and adds it to an
+   * array of objects with the same properties.
+   */
+  const addImageToArray = async (uri: string) => {
+    let newId: number = 1
+    if (arrImage.length !== 0){
+    newId =  arrImage[arrImage.length -1].id + 1;
+    }
+    const obj: IObj = { id: newId, uri: uri };
+    await setArrImage([...arrImage, obj]);
+    return;
+  };
+
+  /**
+   * Delete the image from the array and set the bodyImageSource to an empty string.
+   */
+  const deleteImageFromArray =  () => {
+    try {
+    setArrImage(arrImage.filter((item) => item.uri !== bodyImageSource));
+    setBodyImageSource("");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <Fragment>
       <View style={styles.container}>
         {isLoading ? (
           <Text>Is loading...</Text>
@@ -132,34 +172,52 @@ const NewPostScreen = () => {
             keyboardType="default"
             style={styles.textinput}
           />
-          <Button title="Take a picture" onPress={handleUseCamera}/>
-          <Button title="Choose a picture" onPress={handleChoosePicture}/>
+          <Button title="Take a picture" onPress={handleUseCamera} />
+          <Button title="Choose a picture" onPress={handleChoosePicture} />
         </View>
-        {useCamera ? <View style={styles.cameraContainer}>
-          <Camera
-            style={styles.camera}
-            type={type}
-            ref={(r) => {
-              camera = r;
-            }}
-          >
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={toggleCameraType}
-              >
-                <Text style={styles.text}>Flip Camera</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={takePicture}>
-                <Text style={styles.text}>Take Picture</Text>
-              </TouchableOpacity>
+        {useCamera ? (
+          <View style={styles.cameraContainer}>
+            <Camera
+              style={styles.camera}
+              type={type}
+              ref={(r) => {
+                camera = r;
+              }}
+            >
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={toggleCameraType}
+                >
+                  <Text style={styles.text}>Flip Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={takePicture}>
+                  <Text style={styles.text}>Take Picture</Text>
+                </TouchableOpacity>
+              </View>
+            </Camera>
+          </View>
+        ) : (
+          bodyImageSource && (
+            
+            <View>
+              <Image
+                style={{ height: 300, width: 300 }}
+                source={{ uri: bodyImageSource }}
+              />
+              <Button
+                  title="Delete"
+                  onPress={deleteImageFromArray}
+                />
             </View>
-          </Camera>
-        </View> : <View></View>}
+          )
+        )}  
       </View>
-    </>
+    </Fragment>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -182,32 +240,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   camera: {
-    marginTop:100,
-    width:350,
-    height:400,
+    marginTop: 100,
+    width: 350,
+    height: 400,
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 'auto',
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: "auto",
   },
   button: {
     flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    borderColor:'white',
-    borderRadius:100,
-    borderWidth:1,
-
+    alignSelf: "flex-end",
+    alignItems: "center",
+    borderColor: "white",
+    borderRadius: 100,
+    borderWidth: 1,
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
   },
-  submitButton:{
-  }
+  submitButton: {},
 });
 
 export default NewPostScreen;

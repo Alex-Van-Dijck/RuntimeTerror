@@ -4,12 +4,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 
 interface settingProps{
-  func: (value:number)=> void
+  setTheme: (value:number)=> void
+  Theme:number
 }
 
-const SettingsScreen = ({func}:settingProps) =>{
-
-  const [Theme, setTheme] = useState(0);
+const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
 
   useEffect(() => {
     const getData = async () => {
@@ -26,10 +25,8 @@ const SettingsScreen = ({func}:settingProps) =>{
   const toggleTheme = () =>{
     if(Theme==0){
       setTheme(1);
-      func(1);
     }else{
       setTheme(0);
-      func(0);
     }
     
   }

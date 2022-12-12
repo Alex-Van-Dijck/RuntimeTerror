@@ -68,7 +68,7 @@ const App = () => {
           <Tab.Screen name="New Post" component={NewPostScreen} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <Entypo name="camera" size={size} color={color} />
         }}   />
-        <Tab.Screen name="Settings" children={()=><SettingsScreen func={toggleState}/>} options={{
+        <Tab.Screen name="Settings" children={()=><SettingsScreen Theme={Theme} setTheme={toggleState}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="gear" size={size} color={color} />
         }}   />
         </Tab.Navigator>

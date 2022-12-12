@@ -16,6 +16,10 @@ const App = () => {
   const isFocused = useIsFocused;
   const [Theme, setTheme] = useState(0);
   
+  const  toggleState=(value:number)=>{
+    console.log("State: " + value);
+    setTheme(value);
+  }
 
   useEffect(() => {
     const getData = async () => {
@@ -23,9 +27,11 @@ const App = () => {
       if (value !== null) {
         setTheme(parseInt(value));
       }
+      console.log("GET in app" + value);
     };
     getData();
-  },[isFocused] );
+    
+  },[setTheme] );
 
   const Tab = createBottomTabNavigator();
 
@@ -62,7 +68,7 @@ const App = () => {
           <Tab.Screen name="New Post" component={NewPostScreen} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <Entypo name="camera" size={size} color={color} />
         }}   />
-        <Tab.Screen name="Settings" children={()=><SettingsScreen func={setTheme}/>} options={{
+        <Tab.Screen name="Settings" children={()=><SettingsScreen func={toggleState}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="gear" size={size} color={color} />
         }}   />
         </Tab.Navigator>

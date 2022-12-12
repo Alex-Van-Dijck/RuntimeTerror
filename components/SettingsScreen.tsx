@@ -9,8 +9,6 @@ interface settingProps{
 
 const SettingsScreen = ({func}:settingProps) =>{
 
-  
-
   const [Theme, setTheme] = useState(0);
 
   useEffect(() => {
@@ -19,27 +17,31 @@ const SettingsScreen = ({func}:settingProps) =>{
       if (value !== null) {
         setTheme(parseInt(value));
       }
+      console.log('GET in settings ' + value);
     };
     getData();
   }, []);
 
-  useEffect(() => {
-    const storeData = async () => {
-      await AsyncStorage.setItem("Theme", Theme.toString());
-    };
-    storeData();
-  }, [Theme]);
-  
- 
 
   const toggleTheme = () =>{
     if(Theme==0){
-      setTheme(1)
+      setTheme(1);
+      func(1);
     }else{
       setTheme(0);
+      func(0);
     }
-    func(Theme);
+    
   }
+
+  useEffect(() => {
+    const storeData = async () => {
+      await AsyncStorage.setItem("Theme", Theme.toString());
+      console.log("POST  " + Theme);
+    };
+    storeData();
+    
+  }, [toggleTheme]);
 
     return(
         <View >

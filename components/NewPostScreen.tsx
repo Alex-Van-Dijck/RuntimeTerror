@@ -204,8 +204,8 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             </Camera>
           </View>
         ) : (
+          // TODO extract in components
           bodyImageSource && (
-            
             <View>
               <Image
                 style={{ height: 300, width: 300 }}

@@ -8,14 +8,16 @@ import {
   Text,
   Image,
   ScrollView,
+
 } from "react-native";
 import Header from "./Header";
 import Constants from "expo-constants";
 import { Camera, CameraType } from "expo-camera";
-import { getAPIData, getUser, IUser } from "../services/apiService";
+import { getAPIData, getUser, IPost, IUser } from "../services/apiService";
 import { Title } from "../services/titleEnum";
 import { getImageUrl } from "../services/imageService";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface INewPostScreenProps{
   Theme:number
@@ -30,12 +32,15 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [caption, setCaption] = useState<string>("");
-  const [tags, setTags] = useState<string[]>([""]);
+  const [tags, setTags] = useState<string>("");
   const [bodyImageSource, setBodyImageSource] = useState<string>("");
   const [arrImage, setArrImage] = useState<IObj[]>([]);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [useCamera, setUseCamera] = useState<boolean>(false);
+  const [newPost,setNewPost] = useState<IPost>();
+
+
 
   useEffect(() => {
     const loadUser = async () => {
@@ -146,6 +151,19 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
     }
   }
 
+  const storeArray = async () => {
+    let imgString = JSON.stringify(arrImage);
+    await AsyncStorage.setItem ("Array",imgString);
+  };
+  
+  // useEffect(()=>{
+  //   storeArray();
+  // },[]);
+
+  const createPost=()=>{
+      console.log('this function has not been implemented yet!');
+  }
+
   return (
     <Fragment>
       <View style={styles.container}>
@@ -166,9 +184,11 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             placeholderTextColor={Theme===0?'grey':'lightgrey'}
             keyboardType="default"
             style={Theme===0?styles.textinput:styles.textInputDark}
-            onSubmitEditing={(e) => {
+            onChange={(e) => {
               setCaption(e.nativeEvent.text);
-            }}
+            }
+          }
+          value={caption}
           />
           <TextInput
             secureTextEntry={false}
@@ -177,6 +197,10 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             keyboardType="default"
             placeholderTextColor={Theme===0?'grey':'lightgrey'}
             style={Theme===0?styles.textinput:styles.textInputDark}
+            onChange={(e)=>{
+              setTags(e.nativeEvent.text);
+            }}
+            value={tags}
           />
           <Button title="Take a picture" onPress={handleUseCamera} />
           <Button title="Choose a picture" onPress={handleChoosePicture} />
@@ -218,6 +242,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             </View>
           )
         )}  
+      <Button title="Submit" onPress={createPost}/>  
       </View>
     </Fragment>
   );

@@ -4,7 +4,7 @@ import Body from "./Body";
 import Footer from "./Footer";
 import LikeButton from "./LikeButton";
 
-interface IPostProps {
+export interface IPostProps {
   userImageSource: string;
   userName: string;
   bodyImageSource: string;

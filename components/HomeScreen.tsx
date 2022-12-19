@@ -14,8 +14,17 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
+  const [ownPosts,setownPosts] = useState<IPost[]>([]);
 
-  
+
+  const getArray = async () => {
+    const value = await AsyncStorage.getItem("name");
+    if (value !== null) {
+      setownPosts(JSON.parse(value));
+    } else {
+      setownPosts([]);
+    }
+  };
   
   /* A hook that is used to fetch data from the api. */ 
 
@@ -32,6 +41,23 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
           {isLoading ? (
             <Text>Is loading...</Text>
           ) : posts.length === 0 ? (<Text>You made no posts yet</Text>) : (
+            <>
+            
+            <View style={{alignItems:'center'}}>
+              {ownPosts.map((post: IPost, index) => (
+              <Post
+                theme={Theme}
+                key={index}
+                userImageSource={post.owner.picture}
+                userName={`${post.owner.firstName} ${post.owner.lastName}`}
+                bodyImageSource={post.image}
+                tags={post.tags}
+                caption={post.text}
+                liked={false}
+                likes={post.likes}
+                />
+              ))}
+            </View>
             <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
@@ -47,6 +73,7 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
               />
             ))}
           </View>
+          </>
           )}
         </ScrollView>
            

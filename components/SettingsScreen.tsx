@@ -16,7 +16,6 @@ const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
       if (value !== null) {
         setTheme(parseInt(value));
       }
-      console.log('GET in settings ' + value);
     };
     getData();
   }, []);
@@ -34,7 +33,6 @@ const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
   useEffect(() => {
     const storeData = async () => {
       await AsyncStorage.setItem("Theme", Theme.toString());
-      console.log("POST  " + Theme);
     };
     storeData();
     

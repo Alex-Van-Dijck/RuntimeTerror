@@ -17,7 +17,6 @@ const App = () => {
   const [Theme, setTheme] = useState(0);
   
   const  toggleState=(value:number)=>{
-    console.log("State: " + value);
     setTheme(value);
   }
 
@@ -27,7 +26,6 @@ const App = () => {
       if (value !== null) {
         setTheme(parseInt(value));
       }
-      console.log("GET in app" + value);
     };
     getData();
     
@@ -65,7 +63,7 @@ const App = () => {
           <Tab.Screen name="Home" children={()=><HomeScreen Theme={Theme}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="home" size={size} color={color} />
         }}  />
-          <Tab.Screen name="New Post" component={NewPostScreen} options={{
+          <Tab.Screen name="New Post" children={()=><NewPostScreen Theme={Theme} />} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <Entypo name="camera" size={size} color={color} />
         }}   />
         <Tab.Screen name="Settings" children={()=><SettingsScreen Theme={Theme} setTheme={toggleState}/>} options={{

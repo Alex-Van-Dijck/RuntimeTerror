@@ -17,7 +17,11 @@ import { Title } from "../services/titleEnum";
 import { getImageUrl } from "../services/imageService";
 import * as ImagePicker from "expo-image-picker";
 
-const NewPostScreen = () => {
+interface INewPostScreenProps{
+  Theme:number
+}
+
+const NewPostScreen = ({Theme}:INewPostScreenProps) => {
   const [user, setUser] = useState<IUser>({
     title: "",
     firstName: "",
@@ -54,7 +58,7 @@ const NewPostScreen = () => {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center" }}>
+        <Text style={{ textAlign: "center"}}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
@@ -77,7 +81,6 @@ const NewPostScreen = () => {
    * false, and sets the bodyImageSource state to the photo's uri.
    */
   const takePicture = async () => {
-    console.log("taking picture");
     if (!camera) return;
     const photo = await camera.takePictureAsync();
     await setUseCamera(false);
@@ -160,8 +163,9 @@ const NewPostScreen = () => {
             secureTextEntry={false}
             autoCapitalize="characters"
             placeholder="Caption"
+            placeholderTextColor={Theme===0?'grey':'lightgrey'}
             keyboardType="default"
-            style={styles.textinput}
+            style={Theme===0?styles.textinput:styles.textInputDark}
             onSubmitEditing={(e) => {
               setCaption(e.nativeEvent.text);
             }}
@@ -171,7 +175,8 @@ const NewPostScreen = () => {
             autoCapitalize="characters"
             placeholder="Tags (Separated by ',')"
             keyboardType="default"
-            style={styles.textinput}
+            placeholderTextColor={Theme===0?'grey':'lightgrey'}
+            style={Theme===0?styles.textinput:styles.textInputDark}
           />
           <Button title="Take a picture" onPress={handleUseCamera} />
           <Button title="Choose a picture" onPress={handleChoosePicture} />
@@ -235,6 +240,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderColor: "lightblue",
     borderWidth: 1,
+  },
+  textInputDark:{
+    marginTop: 10,
+    borderColor: "lightblue",
+    borderWidth: 1,
+    color:'white'
   },
   cameraContainer: {
     flex: 1,

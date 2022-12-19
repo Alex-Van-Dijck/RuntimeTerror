@@ -3,6 +3,8 @@ import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import LikeButton from "./LikeButton";
+import { ITheme, themeContext } from "../App";
+import { useContext } from "react";
 
 interface IPostProps {
   userImageSource: string;
@@ -12,7 +14,6 @@ interface IPostProps {
   caption: string;
   likes: number;
   liked: boolean;
-  theme: number;
 }
 
 const Post = ({
@@ -22,15 +23,15 @@ const Post = ({
   tags,
   caption,
   liked,
-  likes,
-  theme
+  likes
 }: IPostProps) => {
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
   return (
     <>
-      <View style={theme==0?styles.card:styles.cardDark}>
-        <Header imageSource={userImageSource} name={userName} theme={theme} />
-        <Body imageSource={bodyImageSource} tags={tags} caption={caption} theme={theme} />
-        <LikeButton theme={theme} liked={liked} likes={likes} />
+      <View style={theme === lightTheme ? styles.card : styles.cardDark}>
+        <Header imageSource={userImageSource} name={userName} />
+        <Body imageSource={bodyImageSource} tags={tags} caption={caption}/>
+        <LikeButton liked={liked} likes={likes} />
       </View>
     </>
   );

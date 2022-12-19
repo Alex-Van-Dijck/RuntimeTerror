@@ -1,15 +1,14 @@
 import {View,Text,StyleSheet, Pressable,Button} from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
-import { useState } from 'react';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useContext, useState } from 'react';
+import { themeContext } from '../App';
 
 interface ILikeProps{
     likes:number,
     liked:boolean,
-    theme:number
 }
 
-const LikeButton = ({likes,liked,theme}:ILikeProps) =>{
+const LikeButton = ({likes,liked}:ILikeProps) =>{
 
     const [likesNow,setLikesNow] = useState<number>(likes);
     const [likedNow,setLikedNow] = useState<Boolean>(liked);
@@ -19,12 +18,12 @@ const LikeButton = ({likes,liked,theme}:ILikeProps) =>{
 
         likedNow? setLikesNow(likesNow-1) : setLikesNow(likesNow+1);
     }
-
+    const {theme, lightTheme, darkTheme} = useContext(themeContext);
     return(
         <View style={styles.container}>
             <Pressable onPress={()=>{handleLike()}} style={styles.pressable}>
-                {likedNow? <AntDesign name="like1" size={24} color={theme==0?"black":"white"} /> : <AntDesign name="like2" size={24} color={theme==0?"black":"white"} /> }
-                <Text style={theme==0?styles.light:styles.dark}>{likesNow} </Text>
+                {likedNow? <AntDesign name="like1" size={24} color={theme === lightTheme ? "black" : "white" } /> : <AntDesign name="like2" size={24} color={theme === lightTheme ? "black" : "white"} /> }
+                <Text style={theme === lightTheme ? styles.light : styles.dark}>{likesNow} </Text>
             </Pressable>
         </View>
     )

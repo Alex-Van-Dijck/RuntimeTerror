@@ -1,9 +1,10 @@
+import { useContext } from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
+import { themeContext } from "../App";
 
 interface IHeaderProps {
   imageSource: string;
   name: string;
-  theme:number;
 }
 
 /**
@@ -12,14 +13,15 @@ interface IHeaderProps {
  * @param {IHeaderProps}  - IHeaderProps
  * @returns A React component.
  */
-const Header = ({ imageSource, name,theme }: IHeaderProps) => {
+const Header = ({ imageSource, name }: IHeaderProps) => {
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
   return (
     <View style={styles.container}>
       <View>
         <Image style={styles.image} source={{ uri: imageSource }} />
       </View>
       <View>
-        <Text style={theme==0?styles.name:styles.nameDark}>{name}</Text>
+        <Text style={theme=== lightTheme ?styles.name:styles.nameDark}>{name}</Text>
       </View>
     </View>
   );

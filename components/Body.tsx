@@ -1,18 +1,20 @@
+import { useContext } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
+import { themeContext } from "../App";
 
 interface IBodyProps {
   imageSource: string;
   tags: string[];
   caption: string;
-  theme:number,
 }
 
-const Body = ({ imageSource, tags, caption,theme }: IBodyProps) => {
+const Body = ({ imageSource, tags, caption }: IBodyProps) => {
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
   return (
     <View style={styles.container}>
-      <Text style={theme==0?styles.caption:styles.captionDark}>{caption}</Text>
+      <Text style={theme === lightTheme ? styles.caption : styles.captionDark}>{caption}</Text>
       <Image style={styles.image} source={{ uri: imageSource }} />
-      <Text style={theme==0?styles.tags:styles.tagsDark}>
+      <Text style={theme === lightTheme ? styles.tags : styles.tagsDark}>
         {tags.map((tag: string, key) => (
           <Text key={key}>#{tag} </Text>
         ))}

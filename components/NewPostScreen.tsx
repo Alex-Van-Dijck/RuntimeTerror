@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -16,12 +16,9 @@ import { getAPIData, getUser, IUser } from "../services/apiService";
 import { Title } from "../services/titleEnum";
 import { getImageUrl } from "../services/imageService";
 import * as ImagePicker from "expo-image-picker";
+import { themeContext } from "../App";
 
-interface INewPostScreenProps{
-  Theme:number
-}
-
-const NewPostScreen = ({Theme}:INewPostScreenProps) => {
+const NewPostScreen = () => {
   const [user, setUser] = useState<IUser>({
     title: "",
     firstName: "",
@@ -36,6 +33,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [useCamera, setUseCamera] = useState<boolean>(false);
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -153,7 +151,6 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
           <Text>Is loading...</Text>
         ) : (
           <Header
-            theme={0}
             imageSource={`${user.picture}`}
             name={`${user.firstName} ${user.lastName}`}
           />
@@ -163,9 +160,9 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             secureTextEntry={false}
             autoCapitalize="characters"
             placeholder="Caption"
-            placeholderTextColor={Theme===0?'grey':'lightgrey'}
+            placeholderTextColor={theme === lightTheme ? 'grey':'lightgrey'}
             keyboardType="default"
-            style={Theme===0?styles.textinput:styles.textInputDark}
+            style={theme === lightTheme ? styles.textinput : styles.textInputDark}
             onSubmitEditing={(e) => {
               setCaption(e.nativeEvent.text);
             }}
@@ -175,8 +172,8 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             autoCapitalize="characters"
             placeholder="Tags (Separated by ',')"
             keyboardType="default"
-            placeholderTextColor={Theme===0?'grey':'lightgrey'}
-            style={Theme===0?styles.textinput:styles.textInputDark}
+            placeholderTextColor={theme === lightTheme ? 'grey' : 'lightgrey'}
+            style={theme === lightTheme ? styles.textinput : styles.textInputDark}
           />
           <Button title="Take a picture" onPress={handleUseCamera} />
           <Button title="Choose a picture" onPress={handleChoosePicture} />

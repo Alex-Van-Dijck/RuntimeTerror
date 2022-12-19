@@ -1,20 +1,21 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect, useContext} from "react";
 import {View,StyleSheet,Button,Text} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
+import { themeContext } from "../App";
 
 interface settingProps{
-  setTheme: (value:number)=> void
-  Theme:number
+  setTheme: () => void
 }
 
-const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
+const SettingsScreen = ({setTheme}:settingProps) =>{
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
 
   useEffect(() => {
     const getData = async () => {
       const value = await AsyncStorage.getItem("Theme");
       if (value !== null) {
-        setTheme(parseInt(value));
+        setTheme();
       }
     };
     getData();
@@ -22,17 +23,16 @@ const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
 
 
   const toggleTheme = () =>{
-    if(Theme==0){
-      setTheme(1);
-    }else{
-      setTheme(0);
-    }
-    
+    setTheme();    
   }
 
   useEffect(() => {
     const storeData = async () => {
-      await AsyncStorage.setItem("Theme", Theme.toString());
+      if (theme === lightTheme) {
+        await AsyncStorage.setItem("Theme", "lightTheme");
+      } else {
+        await AsyncStorage.setItem("Theme", "darkTheme");
+      }
     };
     storeData();
     

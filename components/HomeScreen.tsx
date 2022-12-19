@@ -5,15 +5,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAPIData, getUser, IPost, IUser } from "../services/apiService";
 import Constants from "expo-constants";
 import { useIsFocused } from "@react-navigation/native";
+import { themeContext } from "../App";
 
 interface HomeScreenProps{
   Theme:number
 }
 
-const HomeScreen = ({Theme}:HomeScreenProps) =>{
+const HomeScreen = () =>{
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
+
+  const {theme, lightTheme, darkTheme} = useContext(themeContext);
 
   
   
@@ -35,7 +38,6 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
             <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
-                theme={Theme}
                 key={index}
                 userImageSource={post.owner.picture}
                 userName={`${post.owner.firstName} ${post.owner.lastName}`}

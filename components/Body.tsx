@@ -4,14 +4,15 @@ interface IBodyProps {
   imageSource: string;
   tags: string[];
   caption: string;
+  theme:number,
 }
 
-const Body = ({ imageSource, tags, caption }: IBodyProps) => {
+const Body = ({ imageSource, tags, caption,theme }: IBodyProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.caption}>{caption}</Text>
+      <Text style={theme==0?styles.caption:styles.captionDark}>{caption}</Text>
       <Image style={styles.image} source={{ uri: imageSource }} />
-      <Text style={styles.tags}>
+      <Text style={theme==0?styles.tags:styles.tagsDark}>
         {tags.map((tag: string, key) => (
           <Text key={key}>#{tag} </Text>
         ))}
@@ -40,6 +41,16 @@ const styles = StyleSheet.create({
   caption: {
     textAlign: "left",
   },
+  tagsDark:{
+    textAlign: "left",
+    paddingBottom: 10,
+    paddingTop: 10,
+    color:'white'
+  },
+  captionDark:{
+    color:'white',
+    textAlign: "left"
+  }
 });
 
 export default Body;

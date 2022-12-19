@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 
 import HomeScreen from "./components/HomeScreen";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer ,useIsFocused,useFocusEffect} from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import NewPostScreen from "./components/NewPostScreen";
 import { FontAwesome } from "@expo/vector-icons";
@@ -11,9 +11,27 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import SettingsScreen from "./components/SettingsScreen";
 
 
-
 const App = () => {
 
+  const isFocused = useIsFocused;
+  const [Theme, setTheme] = useState(0);
+  
+  const  toggleState=(value:number)=>{
+    console.log("State: " + value);
+    setTheme(value);
+  }
+
+  useEffect(() => {
+    const getData = async () => {
+      const value = await AsyncStorage.getItem("Theme");
+      if (value !== null) {
+        setTheme(parseInt(value));
+      }
+      console.log("GET in app" + value);
+    };
+    getData();
+    
+  },[setTheme] );
 
   const Tab = createBottomTabNavigator();
 
@@ -42,15 +60,15 @@ const App = () => {
     };
 
   return (
-    <NavigationContainer theme={lightTheme} >
+    <NavigationContainer theme={Theme==0?lightTheme:darkTheme}>
         <Tab.Navigator >
-          <Tab.Screen name="Home" component={HomeScreen} options={{
+          <Tab.Screen name="Home" children={()=><HomeScreen Theme={Theme}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="home" size={size} color={color} />
         }}  />
           <Tab.Screen name="New Post" component={NewPostScreen} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <Entypo name="camera" size={size} color={color} />
         }}   />
-        <Tab.Screen name="Settings" component={SettingsScreen} options={{
+        <Tab.Screen name="Settings" children={()=><SettingsScreen Theme={Theme} setTheme={toggleState}/>} options={{
             tabBarIcon: ({color, size}: {color:any, size:any}) => <FontAwesome name="gear" size={size} color={color} />
         }}   />
         </Tab.Navigator>

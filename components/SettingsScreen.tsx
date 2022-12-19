@@ -1,36 +1,47 @@
-import React,{useState} from "react";
-import {View,StyleSheet,Button} from 'react-native';
+import React,{useState,useEffect} from "react";
+import {View,StyleSheet,Button,Text} from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 
-const storeData = async()=>{
-    await AsyncStorage.setItem("Mode","0");
-  };
-  
-  const getData =async () => {
-    const value = await AsyncStorage.getItem("Mode");
-    if(value !== null){
-      alert(parseInt(value));
-    }else{
-      alert("No data found");
-    }
-  };
-  
+interface settingProps{
+  setTheme: (value:number)=> void
+  Theme:number
+}
 
-const SettingsScreen = () =>{
+const SettingsScreen = ({setTheme,Theme}:settingProps) =>{
 
-  const [theme,setTheme] = useState<Boolean>(true);
+  useEffect(() => {
+    const getData = async () => {
+      const value = await AsyncStorage.getItem("Theme");
+      if (value !== null) {
+        setTheme(parseInt(value));
+      }
+      console.log('GET in settings ' + value);
+    };
+    getData();
+  }, []);
+
 
   const toggleTheme = () =>{
-    if(theme){
-      setTheme(false);
+    if(Theme==0){
+      setTheme(1);
     }else{
-      setTheme(true);
+      setTheme(0);
     }
+    
   }
 
+  useEffect(() => {
+    const storeData = async () => {
+      await AsyncStorage.setItem("Theme", Theme.toString());
+      console.log("POST  " + Theme);
+    };
+    storeData();
+    
+  }, [toggleTheme]);
+
     return(
-        <View style={theme?styles.container:styles.containerDark}>
+        <View >
             <Button onPress={toggleTheme} title="Switch theme" />
         </View>
 

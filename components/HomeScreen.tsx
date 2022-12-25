@@ -18,7 +18,7 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
 
 
   const getArray = async () => {
-    const value = await AsyncStorage.getItem("name");
+    const value = await AsyncStorage.getItem("OwnPosts");
     if (value !== null) {
       setownPosts(JSON.parse(value));
     } else {

@@ -38,9 +38,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [useCamera, setUseCamera] = useState<boolean>(false);
-  const [newPost,setNewPost] = useState<IPost>();
-
-
+  const [newPosts,setNewPosts] = useState<IPost[]>();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -151,17 +149,18 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
     }
   }
 
-  const storeArray = async () => {
-    let imgString = JSON.stringify(arrImage);
-    await AsyncStorage.setItem ("Array",imgString);
-  };
-  
-  // useEffect(()=>{
-  //   storeArray();
-  // },[]);
+  const createPost=async()=>{
 
-  const createPost=()=>{
-      console.log('this function has not been implemented yet!');
+      let post:IPost = {  
+        image:bodyImageSource,
+        likes:0,
+        tags:tags.split(','),
+        text:caption,
+        publishDate:new Date().toDateString(),
+        owner:user
+      }
+
+      await AsyncStorage.setItem ("ownPost",JSON.stringify(post));
   }
 
   return (
@@ -179,7 +178,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
         <View style={styles.inputContainer}>
           <TextInput
             secureTextEntry={false}
-            autoCapitalize="characters"
+            autoCapitalize="sentences"
             placeholder="Caption"
             placeholderTextColor={Theme===0?'grey':'lightgrey'}
             keyboardType="default"
@@ -192,7 +191,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
           />
           <TextInput
             secureTextEntry={false}
-            autoCapitalize="characters"
+            autoCapitalize="words"
             placeholder="Tags (Separated by ',')"
             keyboardType="default"
             placeholderTextColor={Theme===0?'grey':'lightgrey'}

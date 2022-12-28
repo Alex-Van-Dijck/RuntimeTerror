@@ -14,18 +14,24 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<IPost[]>([]);
   const [onlyCreated, setOnlyCreated] = useState<boolean>(false);
-  const [ownPosts,setownPosts] = useState<IPost[]>([]);
+  const [ownPost,setownPost] = useState<IPost>();
 
 
   const getArray = async () => {
-    const value = await AsyncStorage.getItem("OwnPosts");
-    if (value !== null) {
-      setownPosts(JSON.parse(value));
+    const value = await AsyncStorage.getItem("ownPost");
+    if (value) {
+      setownPost(JSON.parse(value));
     } else {
-      setownPosts([]);
+      setownPost(undefined);
     }
   };
   
+  const isFocused = useIsFocused();
+
+  useEffect(()=>{
+    getArray();
+  },[isFocused])
+ 
   /* A hook that is used to fetch data from the api. */ 
 
   useEffect(() => {
@@ -42,27 +48,28 @@ const HomeScreen = ({Theme}:HomeScreenProps) =>{
             <Text>Is loading...</Text>
           ) : posts.length === 0 ? (<Text>You made no posts yet</Text>) : (
             <>
-            
-            <View style={{alignItems:'center'}}>
-              {ownPosts.map((post: IPost, index) => (
-              <Post
-                theme={Theme}
-                key={index}
-                userImageSource={post.owner.picture}
-                userName={`${post.owner.firstName} ${post.owner.lastName}`}
-                bodyImageSource={post.image}
-                tags={post.tags}
-                caption={post.text}
-                liked={false}
-                likes={post.likes}
-                />
-              ))}
-            </View>
+            <>
+              {ownPost !== undefined && (
+                <View style={{ alignItems: "center" }}>
+                  <Post
+                    theme={Theme}
+                    key={0}
+                    userImageSource={ownPost.owner.picture}
+                    userName={`${ownPost.owner.firstName} ${ownPost.owner.lastName}`}
+                    bodyImageSource={ownPost.image}
+                    tags={ownPost.tags}
+                    caption={ownPost.text}
+                    liked={false}
+                    likes={ownPost.likes}
+                  />
+                </View>
+              )}
+            </>
             <View style={{alignItems:'center'}}>
             {posts.map((post: IPost, index) => (
               <Post
                 theme={Theme}
-                key={index}
+                key={index+1}
                 userImageSource={post.owner.picture}
                 userName={`${post.owner.firstName} ${post.owner.lastName}`}
                 bodyImageSource={post.image}

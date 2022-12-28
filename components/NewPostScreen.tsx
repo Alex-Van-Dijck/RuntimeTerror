@@ -163,6 +163,11 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
       await AsyncStorage.setItem ("ownPost",JSON.stringify(post));
   }
 
+  const enabled =
+  caption.length > 0 &&
+  tags.length > 0 &&
+  bodyImageSource.length > 0;
+
   return (
     <Fragment>
       <View style={styles.container}>
@@ -241,7 +246,7 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             </View>
           )
         )}  
-      <Button title="Submit" onPress={createPost}/>  
+      <Button title="Submit" disabled={!enabled} onPress={createPost}/>  
       </View>
     </Fragment>
   );

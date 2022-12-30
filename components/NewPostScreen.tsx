@@ -246,7 +246,12 @@ const NewPostScreen = ({Theme}:INewPostScreenProps) => {
             </View>
           )
         )}  
-      <Button title="Submit" disabled={!enabled} onPress={createPost}/>  
+        {
+          !useCamera&&<Button title="Submit" disabled={!enabled} onPress={createPost} />
+        }
+          
+
+      
       </View>
     </Fragment>
   );
@@ -304,7 +309,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  submitButton: {},
 });
 
 export default NewPostScreen;
